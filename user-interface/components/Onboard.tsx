@@ -9,9 +9,11 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import Icon from "react-native-vector-icons/Ionicons";
+
 
 const Onboard = () => {
-  const [currentSlide, setCurrentSlide] = useState(0); // State to track the current slide
+  const [currentSlide, setCurrentSlide] = useState(0); 
 
   // Array of slides for easy management
   const slides = [
@@ -24,7 +26,7 @@ const Onboard = () => {
     {
       text: "Shop Easy, Pay with Confidence",
       description:
-        "Secure checkout, verified sellers, and real-time tracking to keep you in control at every step. ",
+        "Secure checkout, verified sellers, and real-time tracking to keep you in control at every step.",
       image: require("@/assets/images/two.jpeg"),
     },
     {
@@ -40,10 +42,14 @@ const Onboard = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      // If on the last slide, navigate to the next page
-      // router.push("/nextPage");
-      console.log("/nextPage");
+      // Navigate to the next page when the last slide is reached
+      router.push("/userlogin");
     }
+  };
+
+  // Skip to the last slide
+  const skipSlides = () => {
+          router.push("/userlogin");
   };
 
   return (
@@ -58,6 +64,13 @@ const Onboard = () => {
           ]}
           style={styles.overlay}
         />
+
+        {/* Skip Button */}
+        <TouchableOpacity style={styles.skipButton} onPress={skipSlides}>
+          <Text style={styles.skipButtonText}>Skip</Text>
+          <Icon name="chevron-forward" size={18} color="#f2f2f2" />
+        </TouchableOpacity>
+
         {/* Circle Indicators */}
         <View style={styles.indicatorContainer}>
           {slides.map((_, index) => (
@@ -79,10 +92,13 @@ const Onboard = () => {
         </View>
 
         <View style={styles.bottonCon}>
+         
+
           <TouchableOpacity style={styles.nextButton} onPress={nextSlide}>
             <Text style={styles.nextButtonText}>
               {currentSlide === slides.length - 1 ? "Finish" : "Next"}
             </Text>
+            <Icon name="chevron-forward" size={18} color="#000" />
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -115,26 +131,44 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 30,
     fontWeight: "bold",
-    width:"100%",
-    
+    width:"100%"
   },
-
+  skipButton: {
+    position: "absolute",
+    bottom: 30,
+    left: 10,
+    gap:10,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "transparent",
+  },
+  skipButtonText: {
+    color: "#f2f2f2",
+    fontSize: 25,
+    marginLeft: 5,
+  },
   nextButton: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#fcd400",
     paddingVertical: 15,
-    alignItems: "center",
+    paddingHorizontal: 20,
     borderRadius: 10,
-    marginHorizontal: 20,
     marginBottom: 30,
-    width: 200,
+    width: 150,
+    justifyContent: "center",
   },
   nextButtonText: {
     color: "#000",
     fontSize: 18,
     fontWeight: "bold",
+    marginLeft: 5,
   },
   bottonCon: {
-    alignItems: "flex-end",
+    alignItems:"flex-end",
+    paddingHorizontal:20,
+    width:"100%",
   },
   indicatorContainer: {
     flexDirection: "row",

@@ -47,10 +47,16 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
-  
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown:false}} />
-        <Stack.Screen name="onboard" options={{ headerShown: false, presentation:'modal' }} />
-      </Stack>
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="onboard"
+        options={{ headerShown: false, presentation: "modal" }}
+      />
+      <Stack.Screen
+        name="userlogin"
+        options={{ headerShown: false }}
+      />
+    </Stack>
   );
 }
