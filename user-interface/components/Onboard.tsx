@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginBottom: 30,
-    width: 150,
+    width: 170,
     justifyContent: "center",
   },
   nextButtonText: {
