@@ -96,7 +96,7 @@ const Onboard = () => {
 
           <TouchableOpacity style={styles.nextButton} onPress={nextSlide}>
             <Text style={styles.nextButtonText}>
-              {currentSlide === slides.length - 1 ? "Finish" : "Next"}
+              {currentSlide === slides.length - 1 ? "Start Shopping" : "Next"}
             </Text>
             <Icon name="chevron-forward" size={18} color="#000" />
           </TouchableOpacity>
