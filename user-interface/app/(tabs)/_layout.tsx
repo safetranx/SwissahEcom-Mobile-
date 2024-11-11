@@ -20,15 +20,13 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="index"
-      />
-      <Tabs.Screen
-        name="two"
+        name="dashboard"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          headerShown:false,
+
         }}
       />
+     
     </Tabs>
   );
 }

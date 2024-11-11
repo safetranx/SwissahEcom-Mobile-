@@ -53,10 +53,9 @@ function RootLayoutNav() {
         name="onboard"
         options={{ headerShown: false, presentation: "modal" }}
       />
-      <Stack.Screen
-        name="userlogin"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="userlogin" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="forgot" options={{ headerShown: false }} />
     </Stack>
   );
 }
