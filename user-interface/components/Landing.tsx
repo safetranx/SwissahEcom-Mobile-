@@ -18,22 +18,23 @@ const Landing = () => {
       <View style={styles.dropcon}>
         <Text style={styles.text}>Select Your Role</Text>
 
-        <View style={styles.pickerWrapper}>
+        <TouchableOpacity style={styles.pickerWrapper}>
           <Picker
             selectedValue={role}
             onValueChange={(itemValue) => setRole(itemValue)}
             style={styles.picker}
           >
+            <Picker.Item label="Select Role" value="" enabled={false} />
             <Picker.Item label="Buyer" value="buyer" />
             <Picker.Item label="Seller" value="seller" />
           </Picker>
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Next Button at the Bottom */}
       <TouchableOpacity
         style={styles.nextButton}
-        onPress={() => router.push('/onboard')}
+        onPress={() => router.push({ pathname: "/onboard", params: { role } })}
       >
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
@@ -69,17 +70,15 @@ const styles = StyleSheet.create({
   },
   pickerWrapper: {
     width: "100%",
-    borderRadius: 20,
-    borderWidth: 1,
-    backgroundColor: "#f1f1f1",
     overflow: "hidden",
-    borderColor: "#f1f1f1",
     marginVertical: 30,
   },
   picker: {
     width: "100%",
     height: 50,
+    paddingHorizontal: 10,
   },
+
   nextButton: {
     backgroundColor: "#fcd400",
     paddingVertical: 15,

@@ -8,13 +8,14 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from 'expo-router';
 import Icon from "react-native-vector-icons/Ionicons";
 
 
 const Onboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0); 
-
+  const { role } = useLocalSearchParams();
+  
   // Array of slides for easy management
   const slides = [
     {
@@ -92,11 +93,13 @@ const Onboard = () => {
         </View>
 
         <View style={styles.bottonCon}>
-         
-
           <TouchableOpacity style={styles.nextButton} onPress={nextSlide}>
             <Text style={styles.nextButtonText}>
-              {currentSlide === slides.length - 1 ? "Start Shopping" : "Next"}
+              {currentSlide === slides.length - 1
+                ? role === "seller"
+                  ? "Start Selling"
+                  : "Start Shopping"
+                : "Next"}
             </Text>
             <Icon name="chevron-forward" size={18} color="#000" />
           </TouchableOpacity>
@@ -174,7 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     position: "absolute",
-    bottom: 350,
+    bottom: 400,
     width: "100%",
   },
   indicator: {
