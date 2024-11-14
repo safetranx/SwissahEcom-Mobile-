@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fcd400",
     paddingVertical: 15,
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: 30,
     marginHorizontal: 20,
     marginBottom: 30,
   },
