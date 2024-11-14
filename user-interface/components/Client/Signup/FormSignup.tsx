@@ -58,12 +58,12 @@ const FormSignup = () => {
           </TouchableOpacity>
         </View>
       </View>
-
       <TouchableOpacity style={styles.authButton}>
         <Text style={styles.authButtonText}>
           Sign Up
         </Text>
       </TouchableOpacity>
+
     </View>
   );
 };
