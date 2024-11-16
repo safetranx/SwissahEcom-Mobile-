@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from "react-native-vector-icons/Ionicons";
@@ -27,11 +27,24 @@ const Dashboard = () => {
       <View style={styles.searchSection}>
         <View style={styles.searchContainer}>
           <View style={styles.searchInput}>
-          <Icon name="search" size={25}></Icon>
-          <TextInput placeholder="Search any product..." />
+            <Icon name="search" size={25}></Icon>
+            <TextInput placeholder="Search any product..." />
           </View>
           <Icon name="mic" size={25}></Icon>
         </View>
+      </View>
+      <View style={styles.slideShow}>
+        <View style={{padding:20,}}>
+          <Text style={styles.mainTopic}>Get Pixel 7 and Pixel 7 Pro</Text>
+          <Text style={styles.subMainTopic}>Full speed ahead</Text>
+          <TouchableOpacity style={styles.shopBtn}>
+            <Text style={{color:"white", textAlign:"center"}}>Shop now</Text>
+          </TouchableOpacity>
+        </View>
+        <Image
+          source={require("@/assets/images/phone.png")}
+          style={styles.phoneImg}
+        />
       </View>
     </SafeAreaView>
   );
@@ -85,7 +98,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
   },
-  searchSection:{
-    paddingHorizontal:20,
+  searchSection: {
+    paddingHorizontal: 20,
+  },
+  slideShow: {
+    backgroundColor: "#ffda2d",
+    marginTop: 30,
+    paddingTop: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  phoneImg: {
+    width: 170,
+  },
+  mainTopic: {
+    fontSize: 30,
+    width: 250,
+    fontWeight: "bold",
+  },
+  subMainTopic: {
+    fontSize: 20,
+  },
+  shopBtn:{
+    backgroundColor:"#000",
+    width:150,
+    padding:10,
+    borderRadius:20,
+    marginTop:13,
+
   },
 });
