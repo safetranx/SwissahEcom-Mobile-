@@ -32,35 +32,29 @@ const Dashboard = () => {
     },
   ];
 
-  const products = [
+const products = Array.from({ length: 10 }, (_, index) => ({
+  id: (index + 1).toString(),
+  name: `Product ${index + 1}`,
+  price: `$${(Math.random() * 100 + 20).toFixed(2)}`, 
+  image: { uri: `https://picsum.photos/200?random=${index + 1}` }, 
+}));
+
+
+  const categories = [
     {
       id: "1",
-      name: "Product 1",
-      price: "$99",
-      image: require("@/assets/images/two.jpeg"),
+      name: "Electronics",
+      image: "https://picsum.photos/200?random=1",
     },
-    {
-      id: "2",
-      name: "Product 2",
-      price: "$129",
-      image: require("@/assets/images/two.jpeg"),
-    },
-    {
-      id: "3",
-      name: "Product 3",
-      price: "$79",
-      image: require("@/assets/images/two.jpeg"),
-    },
-    {
-      id: "4",
-      name: "Product 4",
-      price: "$49",
-      image: require("@/assets/images/two.jpeg"),
-    },
+    { id: "2", name: "Fashion", image: "https://picsum.photos/200?random=2" },
+    { id: "3", name: "Home", image: "https://picsum.photos/200?random=3" },
+    { id: "4", name: "Beauty", image: "https://picsum.photos/200?random=4" },
+    { id: "5", name: "Sports", image: "https://picsum.photos/200?random=5" },
   ];
 
+
   const [currentSlide, setCurrentSlide] = useState(0);
-  const scrollRef = useRef(null);
+   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -135,7 +129,27 @@ const Dashboard = () => {
         ))}
       </ScrollView>
 
+      <View style={styles.trendingContainer}>
+        <Text style={styles.CategoryText}>Categories</Text>
+      </View>
+      <FlatList
+        data={categories}
+        renderItem={({ item }) => (
+          <View style={styles.categoryItem}>
+            <Image source={{ uri: item.image }} style={styles.categoryImage} />
+            <Text style={styles.categoryName}>{item.name}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryList}
+      />
+
       {/* Product Cards Section */}
+      <View style={styles.trendingContainer}>
+        <Text style={styles.trendingText}>Trending</Text>
+      </View>
       <FlatList
         data={products}
         renderItem={({ item }) => (
@@ -162,11 +176,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileDisplay: {
-    paddingTop: 27,
+    paddingTop: 20,
     paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingBottom: 50,
+    alignItems: "center",
   },
   greetContainer: {
     flexDirection: "column",
@@ -174,66 +188,79 @@ const styles = StyleSheet.create({
   greetingDisplay: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
+    gap: 15,
   },
   greetingDisplay1: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
+    gap: 15,
   },
   welcomeBack: {
     color: "#8C8C8C",
+    fontSize: 14,
   },
   UserName: {
-    color: "#111111",
+    color: "#111",
     fontSize: 18,
+    fontWeight: "600",
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 30,
+    width: 45,
+    height: 45,
+    borderRadius: 25,
   },
   searchSection: {
     paddingHorizontal: 20,
+    marginTop: 20,
   },
   searchContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 10,
+    padding: 10,
+    gap: 10,
   },
   searchInput: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
+    flex: 1,
+    gap: 10,
   },
   slideShow: {
-    marginTop: 30,
+    marginTop: 20,
+    height:800,
   },
   slide: {
-    width: Dimensions.get("window").width,
+    width: Dimensions.get("window").width * 0.9,
+    height: Dimensions.get("window").width * 0.5,
     backgroundColor: "#ffda2d",
     borderRadius: 15,
-    marginRight: 10,
     flexDirection: "row",
-    alignItems:"center",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 5,
+    marginHorizontal: Dimensions.get("window").width * 0.05,
   },
   slideImage: {
-    width: 150,
-    // height: 150,
+    width: "40%",
+    height: "80%",
+    resizeMode: "contain",
   },
   mainTopic: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   subMainTopic: {
-    fontSize: 15,
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 5,
   },
   shopBtn: {
     backgroundColor: "#000",
-    width: 100,
-    padding: 10,
-    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 8,
     marginTop: 10,
   },
   productList: {
@@ -253,15 +280,60 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cardImage: {
-    width: 100,
-    height: 100,
+    width: Dimensions.get("window").width * 0.35,
+    height: Dimensions.get("window").width * 0.35,
+    resizeMode: "contain",
     marginBottom: 10,
   },
   cardTitle: {
     fontSize: 14,
     fontWeight: "bold",
+    textAlign: "center",
   },
   cardPrice: {
     color: "#555",
+    fontSize: 12,
+  },
+  trendingText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  CategoryText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  trendingContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+  },
+  categoryList: {
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    alignItems: "center",
+
+  },
+  categoryItem: {
+    alignItems: "center",
+    marginRight: 20,
+    maxWidth: Dimensions.get("window").width * 0.2,
+    padding:47,
+  },
+  categoryImage: {
+    width: Dimensions.get("window").width * 0.18,
+    height: Dimensions.get("window").width * 0.18,
+    borderRadius: 50,
+    marginBottom: 8,
+    backgroundColor: "#f0f0f0",
+  },
+  categoryName: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#333",
+    textAlign: "center",
   },
 });
+
