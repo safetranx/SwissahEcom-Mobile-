@@ -13,6 +13,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+
 const Dashboard = () => {
   const slides = [
     {
@@ -32,13 +34,12 @@ const Dashboard = () => {
     },
   ];
 
-const products = Array.from({ length: 10 }, (_, index) => ({
-  id: (index + 1).toString(),
-  name: `Product ${index + 1}`,
-  price: `$${(Math.random() * 100 + 20).toFixed(2)}`, 
-  image: { uri: `https://picsum.photos/200?random=${index + 1}` }, 
-}));
-
+  const products = Array.from({ length: 10 }, (_, index) => ({
+    id: (index + 1).toString(),
+    name: `Product ${index + 1}`,
+    price: `$${(Math.random() * 100 + 20).toFixed(2)}`,
+    image: { uri: `https://picsum.photos/200?random=${index + 1}` },
+  }));
 
   const categories = [
     {
@@ -52,22 +53,21 @@ const products = Array.from({ length: 10 }, (_, index) => ({
     { id: "5", name: "Sports", image: "https://picsum.photos/200?random=5" },
   ];
 
-
   const [currentSlide, setCurrentSlide] = useState(0);
-   const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3000); // Change slide every 3 seconds
-    return () => clearInterval(timer); 
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
     // Automatically scroll to the next slide
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
-        x: currentSlide * Dimensions.get("window").width,
+        x: currentSlide * SCREEN_WIDTH,
         animated: true,
       });
     }
@@ -75,109 +75,114 @@ const products = Array.from({ length: 10 }, (_, index) => ({
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.profileDisplay}>
-        <View style={styles.greetingDisplay}>
-          <Image source={require("@/assets/images/G3.png")} />
-          <View style={styles.greetContainer}>
-            <Text style={styles.welcomeBack}>Welcome Back</Text>
-            <Text style={styles.UserName}>User</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header Section */}
+        <View style={styles.profileDisplay}>
+          <View style={styles.greetingDisplay}>
+            <Image source={require("@/assets/images/G3.png")} />
+            <View>
+              <Text style={styles.welcomeBack}>Welcome Back</Text>
+              <Text style={styles.UserName}>User</Text>
+            </View>
+          </View>
+          <View style={styles.greetingDisplay1}>
+            <Icon name="notifications-outline" size={28} color="#111" />
+            <Image
+              source={require("@/assets/images/avatar.jpeg")}
+              style={styles.avatar}
+            />
           </View>
         </View>
 
-        <View style={styles.greetingDisplay1}>
-          <Icon name="notifications-outline" size={34} color="#111" />
-          <Image
-            source={require("@/assets/images/avatar.jpeg")}
-            style={styles.avatar}
+        {/* Search Section */}
+        <View style={styles.searchSection}>
+          <View style={styles.searchContainer}>
+            <View style={styles.searchInput}>
+              <Icon name="search" size={20} />
+              <TextInput
+                placeholder="Search any product..."
+                style={styles.searchTextInput}
+              />
+            </View>
+            <Icon name="mic" size={20} />
+          </View>
+        </View>
+
+        {/* Automatic Slideshow Section */}
+
+        <View style={styles.slideShowContainer}>
+          <FlatList
+            data={slides}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View style={styles.slide}>
+                <View style={{ width: "55%", padding: 10 }}>
+                  <Text style={styles.mainTopic}>{item.title}</Text>
+                  <Text style={styles.subMainTopic}>{item.subtitle}</Text>
+                  <TouchableOpacity style={styles.shopBtn}>
+                    <Text style={styles.shopBtnText}>Shop now</Text>
+                  </TouchableOpacity>
+                </View>
+                <Image source={item.image} style={styles.slideImage} />
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
-      </View>
 
-      {/* Search Section */}
-      <View style={styles.searchSection}>
-        <View style={styles.searchContainer}>
-          <View style={styles.searchInput}>
-            <Icon name="search" size={25} />
-            <TextInput placeholder="Search any product..." />
-          </View>
-          <Icon name="mic" size={25} />
-        </View>
-      </View>
-
-      {/* Automatic Slideshow Section */}
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        ref={scrollRef}
-        style={styles.slideShow}
-      >
-        {slides.map((slide, index) => (
-          <View style={styles.slide} key={index}>
-            <View style={{ padding: 25 }}>
-              <Text style={styles.mainTopic}>{slide.title}</Text>
-              <Text style={styles.subMainTopic}>{slide.subtitle}</Text>
-              <TouchableOpacity style={styles.shopBtn}>
-                <Text style={{ color: "white", textAlign: "center" }}>
-                  Shop now
-                </Text>
-              </TouchableOpacity>
+        {/* Categories */}
+        <FlatList
+          data={categories}
+          renderItem={({ item }) => (
+            <View style={styles.categoryItem}>
+              <Image
+                source={{ uri: item.image }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryName}>{item.name}</Text>
             </View>
-            <Image source={slide.image} style={styles.slideImage} />
-          </View>
-        ))}
+          )}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+
+        {/* Products */}
+        <FlatList
+          data={products}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Image source={item.image} style={styles.cardImage} />
+              <Text style={styles.cardTitle}>{item.name}</Text>
+              <Text style={styles.cardPrice}>{item.price}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          columnWrapperStyle={styles.cardRow}
+          contentContainerStyle={styles.productList}
+        />
       </ScrollView>
-
-      <View style={styles.trendingContainer}>
-        <Text style={styles.CategoryText}>Categories</Text>
-      </View>
-      <FlatList
-        data={categories}
-        renderItem={({ item }) => (
-          <View style={styles.categoryItem}>
-            <Image source={{ uri: item.image }} style={styles.categoryImage} />
-            <Text style={styles.categoryName}>{item.name}</Text>
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryList}
-      />
-
-      {/* Product Cards Section */}
-      <View style={styles.trendingContainer}>
-        <Text style={styles.trendingText}>Trending</Text>
-      </View>
-      <FlatList
-        data={products}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Image source={item.image} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardPrice}>{item.price}</Text>
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.cardRow}
-        contentContainerStyle={styles.productList}
-      />
     </SafeAreaView>
   );
 };
 
 export default Dashboard;
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     flex: 1,
+    backgroundColor: "white",
   },
+
+  // Profile Section
   profileDisplay: {
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingTop: screenHeight * 0.03,
+    paddingHorizontal: screenWidth * 0.05,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -188,59 +193,63 @@ const styles = StyleSheet.create({
   greetingDisplay: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 15,
+    gap: screenWidth * 0.03,
   },
   greetingDisplay1: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 15,
+    gap: screenWidth * 0.03,
   },
   welcomeBack: {
+    fontSize: screenWidth * 0.04,
     color: "#8C8C8C",
-    fontSize: 14,
   },
   UserName: {
-    color: "#111",
-    fontSize: 18,
+    fontSize: screenWidth * 0.05,
     fontWeight: "600",
+    color: "#111",
   },
   avatar: {
-    width: 45,
-    height: 45,
-    borderRadius: 25,
+    width: screenWidth * 0.12,
+    height: screenWidth * 0.12,
+    borderRadius: screenWidth * 0.06,
   },
+
+  // Search Section
   searchSection: {
-    paddingHorizontal: 20,
-    marginTop: 20,
+    paddingHorizontal: screenWidth * 0.05,
+    marginTop: screenHeight * 0.02,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-    padding: 10,
-    gap: 10,
+    borderRadius: screenWidth * 0.02,
+    padding: screenWidth * 0.03,
+    gap: screenWidth * 0.02,
   },
   searchInput: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    flex: 1,
-    gap: 10,
+    gap: screenWidth * 0.02,
   },
-  slideShow: {
-    marginTop: 20,
-    height:800,
+
+
+    slideShowContainer: {
+    height: screenHeight * 0.5,
+    marginTop: screenHeight * 0.02,
+    width: SCREEN_WIDTH,
   },
+
   slide: {
-    width: Dimensions.get("window").width * 0.9,
-    height: Dimensions.get("window").width * 0.5,
+    width: SCREEN_WIDTH,
+    height: screenHeight * 0.5, // Match the parent ScrollView height
     backgroundColor: "#ffda2d",
-    borderRadius: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 5,
-    marginHorizontal: Dimensions.get("window").width * 0.05,
+
   },
   slideImage: {
     width: "40%",
@@ -248,92 +257,105 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   mainTopic: {
-    fontSize: 18,
+    fontSize: screenWidth * 0.05,
     fontWeight: "bold",
   },
   subMainTopic: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.04,
     color: "#555",
-    marginVertical: 5,
+    marginVertical: screenHeight * 0.005,
   },
   shopBtn: {
     backgroundColor: "#000",
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 8,
-    marginTop: 10,
+    paddingHorizontal: screenWidth * 0.04,
+    paddingVertical: screenHeight * 0.01,
+    borderRadius: screenWidth * 0.02,
+    marginTop: screenHeight * 0.01,
+    width: "70%",
+  },
+
+  // Categories Section
+  categoryList: {
+    paddingHorizontal: screenWidth * 0.05,
+    paddingVertical: screenHeight * 0.03,
+    alignItems: "center",
+  },
+  categoryItem: {
+    alignItems: "center",
+    marginRight: screenWidth * 0.05,
+    padding:10,
+  },
+  categoryImage: {
+    width: screenWidth * 0.18,
+    height: screenWidth * 0.18,
+    borderRadius: screenWidth * 0.09,
+    marginBottom: screenHeight * 0.01,
+    backgroundColor: "#f0f0f0",
+  },
+  categoryName: {
+    fontSize: screenWidth * 0.035,
+    fontWeight: "600",
+    color: "#333",
+    textAlign: "center",
+  },
+
+  // Product Cards Section
+  trendingText: {
+    fontSize: screenWidth * 0.06,
+    fontWeight: "bold",
+    paddingHorizontal: screenWidth * 0.05,
+    paddingVertical: screenHeight * 0.01,
+  },
+  trendingContainer: {
+    paddingHorizontal: screenWidth * 0.05,
+    paddingTop: screenHeight * 0.02,
   },
   productList: {
-    paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingHorizontal: screenWidth * 0.03,
+    paddingTop: screenHeight * 0.02,
   },
   cardRow: {
     justifyContent: "space-between",
   },
   card: {
     backgroundColor: "#f8f8f8",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 15,
+    borderRadius: screenWidth * 0.03,
+    padding: screenWidth * 0.03,
+    marginBottom: screenHeight * 0.02,
     flex: 1,
-    marginHorizontal: 5,
+    marginHorizontal: screenWidth * 0.01,
     alignItems: "center",
   },
   cardImage: {
-    width: Dimensions.get("window").width * 0.35,
-    height: Dimensions.get("window").width * 0.35,
+    width: screenWidth * 0.35,
+    height: screenWidth * 0.35,
     resizeMode: "contain",
-    marginBottom: 10,
+    marginBottom: screenHeight * 0.01,
   },
   cardTitle: {
-    fontSize: 14,
+    fontSize: screenWidth * 0.04,
     fontWeight: "bold",
     textAlign: "center",
   },
   cardPrice: {
+    fontSize: screenWidth * 0.035,
     color: "#555",
-    fontSize: 12,
   },
-  trendingText: {
-    fontSize: 22,
+  searchTextInput: {
+    fontSize: screenWidth * 0.04,
     fontWeight: "bold",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
   },
   CategoryText: {
-    fontSize: 22,
+    fontSize: screenWidth * 0.04,
     fontWeight: "bold",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    color: "#555",
+    marginBottom: screenHeight * 0.02,
   },
-  trendingContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-  },
-  categoryList: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    alignItems: "center",
-
-  },
-  categoryItem: {
-    alignItems: "center",
-    marginRight: 20,
-    maxWidth: Dimensions.get("window").width * 0.2,
-    padding:47,
-  },
-  categoryImage: {
-    width: Dimensions.get("window").width * 0.18,
-    height: Dimensions.get("window").width * 0.18,
-    borderRadius: 50,
-    marginBottom: 8,
-    backgroundColor: "#f0f0f0",
-  },
-  categoryName: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#333",
+  shopBtnText: {
+    fontSize: screenWidth * 0.04,
+    fontWeight: "bold",
+    color: "#fff",
     textAlign: "center",
   },
-});
 
+});

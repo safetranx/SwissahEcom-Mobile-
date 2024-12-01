@@ -5,17 +5,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
+import { Platform, PixelRatio, Dimensions } from "react-native";
 
+const { height, width } = Dimensions.get("window");
 
 const Onboard = () => {
-  const [currentSlide, setCurrentSlide] = useState(0); 
+  const [currentSlide, setCurrentSlide] = useState(0);
   const { role } = useLocalSearchParams();
-  
+
   // Array of slides for easy management
   const slides = [
     {
@@ -38,19 +40,30 @@ const Onboard = () => {
     },
   ];
 
+
+  useEffect(() => {
+    console.log("Current Slide:", currentSlide);
+  }, [currentSlide]);
+
   // Move to the next slide
-  const nextSlide = () => {
-    if (currentSlide < slides.length - 1) {
-      setCurrentSlide(currentSlide + 1);
-    } else {
-      // Navigate to the next page when the last slide is reached
-      router.push("/userlogin");
-    }
-  };
+const nextSlide = () => {
+  
+  if (currentSlide < slides.length - 1) {
+    setCurrentSlide(currentSlide + 1);
+  } else {
+  setTimeout(() => {
+    router.replace("/userlogin");
+  }, 0);
+
+
+  }
+};
+
+
 
   // Skip to the last slide
   const skipSlides = () => {
-          router.push("/userlogin");
+    router.push("/userlogin");
   };
 
   return (
@@ -65,12 +78,6 @@ const Onboard = () => {
           ]}
           style={styles.overlay}
         />
-
-        {/* Skip Button */}
-        <TouchableOpacity style={styles.skipButton} onPress={skipSlides}>
-          <Text style={styles.skipButtonText}>Skip</Text>
-          <Icon name="chevron-forward" size={18} color="#f2f2f2" />
-        </TouchableOpacity>
 
         {/* Circle Indicators */}
         <View style={styles.indicatorContainer}>
@@ -92,8 +99,19 @@ const Onboard = () => {
           </Text>
         </View>
 
-        <View style={styles.bottonCon}>
-          <TouchableOpacity style={styles.nextButton} onPress={nextSlide}>
+        <View style={styles.buttonsContainer}>
+          {/* Skip Button */}
+          <TouchableOpacity style={styles.skipButton} onPress={skipSlides}>
+            <Text style={styles.skipButtonText}>Skip</Text>
+            <Icon name="chevron-forward" size={18} color="#f2f2f2" />
+          </TouchableOpacity>
+
+          {/* Next Button */}
+          <TouchableOpacity
+            style={styles.nextButton}
+            onPress={nextSlide}
+            activeOpacity={0.7} // Adjust touch sensitivity
+          >
             <Text style={styles.nextButtonText}>
               {currentSlide === slides.length - 1
                 ? role === "seller"
@@ -114,33 +132,47 @@ export default Onboard;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#000", // Fallback background
   },
   image: {
     width: "100%",
     height: "100%",
     justifyContent: "center",
+    resizeMode: "cover",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 25,
-    marginTop: 400,
+    marginTop: height * 0.4, 
   },
   text: {
     color: "#fff",
-    fontSize: 30,
+    fontSize: PixelRatio.getFontScale() * 24, 
     fontWeight: "bold",
-    width:"100%"
+    textAlign: "center",
+    marginVertical: 10,
+    lineHeight: 32, 
+  },
+  onboardButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+  buttonsContainer: {
+    position: "absolute",
+    bottom: Platform.OS === "ios"? 16 : 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%", // Leave some padding on sides
+    alignSelf: "center",
   },
   skipButton: {
-    position: "absolute",
-    bottom: 30,
-    left: 10,
-    gap:10,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
@@ -148,7 +180,7 @@ const styles = StyleSheet.create({
   },
   skipButtonText: {
     color: "#f2f2f2",
-    fontSize: 25,
+    fontSize: 18,
     marginLeft: 5,
   },
   nextButton: {
@@ -158,26 +190,25 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 27,
-    marginBottom: 30,
-    width: 170,
     justifyContent: "center",
   },
   nextButtonText: {
     color: "#000",
-    fontSize: 18,
+    fontSize: PixelRatio.getFontScale() * 16,
     fontWeight: "bold",
-    marginLeft: 5,
+    marginRight: 5,
   },
+
   bottonCon: {
-    alignItems:"flex-end",
-    paddingHorizontal:20,
-    width:"100%",
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
+    width: "100%",
   },
   indicatorContainer: {
     flexDirection: "row",
     justifyContent: "center",
     position: "absolute",
-    bottom: 400,
+    bottom: height * 0.35, 
     width: "100%",
   },
   indicator: {

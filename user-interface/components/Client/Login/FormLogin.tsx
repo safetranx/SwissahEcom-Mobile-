@@ -13,6 +13,9 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ExternalLink } from "@/components/ExternalLink";
 import { router } from "expo-router";
+import { Dimensions, Platform } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 const FormLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,8 +26,9 @@ const FormLogin = () => {
   const handleSignIn = () => {
     setIsModalVisible(true);
     setTimeout(() => {
-      router.replace("/dashboard")
-    }, 5000);
+      router.push("/(tabs)/dashboard")
+      setIsModalVisible(false);
+    }, 3000);
   };
 
   return (
@@ -113,47 +117,68 @@ export default FormLogin;
 
 const styles = StyleSheet.create({
   form: {
-    paddingHorizontal: 30,
-    paddingTop: 20,
+    flex: 1, // Use flex to make it stretch across the screen
+    paddingHorizontal: width * 0.08, // Adjust padding relative to screen width
+    paddingTop: height * 0.005,
   },
   inputContainer: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 14,
-    color: "#000",
-    fontWeight: "bold",
-    marginBottom: 5,
-    marginLeft: 6,
+    marginBottom: height * 0.015, // Relative margin
   },
   input: {
     borderWidth: 1,
     borderColor: "#ddd",
     backgroundColor: "#f1f1f1",
     borderRadius: 10,
-    padding: 15,
+    padding: height * 0.02, // Dynamic padding
+    fontSize: height * 0.02,
   },
   authButton: {
     backgroundColor: "#fcd400",
-    paddingVertical: 15,
+    paddingVertical: height * 0.02,
     borderRadius: 20,
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: height * 0.015,
   },
   authButtonSocials: {
     backgroundColor: "#fff",
-    paddingVertical: 15,
+    paddingVertical: height * 0.02,
     borderRadius: 20,
     borderWidth: 2,
     borderColor: "#fcd400",
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: height * 0.015,
   },
   authButtonText: {
-    color: "#000",
-    fontSize: 18,
+    fontSize: height * 0.022,
     fontWeight: "bold",
+    color: "#000",
   },
+  checkboxText: {
+    fontSize: height * 0.018,
+    color: "#abb3bb",
+  },
+  modalContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: width * 100,
+    height: height * 100,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: height * 0.02,
+  },
+  modalText: {
+    fontSize: height * 0.03,
+    fontWeight: "bold",
+    marginTop: height * 0.02,
+    textAlign: "center",
+  },
+
   icon: {
     paddingHorizontal: 10,
   },
@@ -165,10 +190,7 @@ const styles = StyleSheet.create({
   checkbox: {
     marginRight: 10,
   },
-  checkboxText: {
-    fontSize: 16,
-    color: "#abb3bb",
-  },
+
   showpass: {
     flexDirection: "row",
     alignItems: "center",
@@ -184,25 +206,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   connetWith: {
-    paddingVertical: 50,
+    paddingVertical: 20,
   },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  label: {
+    fontSize: height * 0.018,
+    paddingVertical: 3,
   },
-  modalContent: {
-    alignItems: "center",
-    justifyContent:"center",
-    width: "100%",
-    height:"100%",
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-  },
-  modalText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 50,
-  },
-  
 });
