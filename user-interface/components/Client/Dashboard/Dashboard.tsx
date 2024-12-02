@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ScrollView,
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
@@ -55,7 +54,7 @@ const Dashboard = () => {
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<FlatList>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,123 +66,123 @@ const Dashboard = () => {
   useEffect(() => {
     // Automatically scroll to the next slide
     if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        x: currentSlide * SCREEN_WIDTH,
+      scrollRef.current.scrollToIndex({
+        index: currentSlide,
         animated: true,
       });
     }
   }, [currentSlide]);
 
-const goToDescription = (product:any) => {
-  router.push({
-    pathname: "/description",
-    params: {
-      productName: product.name,
-      productPrice: product.price,
-      productImage: product.image.uri,
-    },
-  });
-};
-
+  const goToDescription = (product: any) => {
+    router.push({
+      pathname: "/description",
+      params: {
+        productName: product.name,
+        productPrice: product.price,
+        productImage: product.image.uri,
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header Section */}
-        <View style={styles.profileDisplay}>
-          <View style={styles.greetingDisplay}>
-            <Image source={require("@/assets/images/G3.png")} />
-            <View>
-              <Text style={styles.welcomeBack}>Welcome Back</Text>
-              <Text style={styles.UserName}>User</Text>
-            </View>
-          </View>
-          <View style={styles.greetingDisplay1}>
-            <Icon name="notifications-outline" size={28} color="#111" />
-            <Image
-              source={require("@/assets/images/avatar.jpeg")}
-              style={styles.avatar}
-            />
-          </View>
-        </View>
-
-        {/* Search Section */}
-        <View style={styles.searchSection}>
-          <View style={styles.searchContainer}>
-            <View style={styles.searchInput}>
-              <Icon name="search" size={20} />
-              <TextInput
-                placeholder="Search any product..."
-                style={styles.searchTextInput}
-              />
-            </View>
-            <Icon name="mic" size={20} />
-          </View>
-        </View>
-
-        {/* Automatic Slideshow Section */}
-
-        <View style={styles.slideShowContainer}>
-          <FlatList
-            data={slides}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <View style={styles.slide}>
-                <View style={{ width: "55%", padding: 10 }}>
-                  <Text style={styles.mainTopic}>{item.title}</Text>
-                  <Text style={styles.subMainTopic}>{item.subtitle}</Text>
-                  <TouchableOpacity style={styles.shopBtn}>
-                    <Text style={styles.shopBtnText}>Shop now</Text>
-                  </TouchableOpacity>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            {/* Header Section */}
+            <View style={styles.profileDisplay}>
+              <View style={styles.greetingDisplay}>
+                <Image source={require("@/assets/images/G3.png")} />
+                <View>
+                  <Text style={styles.welcomeBack}>Welcome Back</Text>
+                  <Text style={styles.UserName}>User</Text>
                 </View>
-                <Image source={item.image} style={styles.slideImage} />
               </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            nestedScrollEnabled={true}
-          />
-        </View>
-
-        {/* Categories */}
-        <FlatList
-          data={categories}
-          renderItem={({ item }) => (
-            <View style={styles.categoryItem}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.categoryImage}
-              />
-              <Text style={styles.categoryName}>{item.name}</Text>
+              <View style={styles.greetingDisplay1}>
+                <Icon name="notifications-outline" size={28} color="#111" />
+                <Image
+                  source={require("@/assets/images/avatar.jpeg")}
+                  style={styles.avatar}
+                />
+              </View>
             </View>
-          )}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          nestedScrollEnabled={true}
-        />
 
-        {/* Products */}
-        <FlatList
-          data={products}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => goToDescription(item)}
-            >
-              <Image source={item.image} style={styles.cardImage} />
-              <Text style={styles.cardTitle}>{item.name}</Text>
-              <Text style={styles.cardPrice}>{item.price}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.cardRow}
-          contentContainerStyle={styles.productList}
-          nestedScrollEnabled={true}
-        />
-      </ScrollView>
+            {/* Search Section */}
+            <View style={styles.searchSection}>
+              <View style={styles.searchContainer}>
+                <View style={styles.searchInput}>
+                  <Icon name="search" size={20} />
+                  <TextInput
+                    placeholder="Search any product..."
+                    style={styles.searchTextInput}
+                  />
+                </View>
+                <Icon name="mic" size={20} />
+              </View>
+            </View>
+
+            {/* Automatic Slideshow Section */}
+            <FlatList
+              data={slides}
+              horizontal
+              pagingEnabled
+              ref={scrollRef}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <View style={styles.slide}>
+                  <View style={{ width: "50%", padding: 10 }}>
+                    <Text style={styles.mainTopic}>{item.title}</Text>
+                    <Text style={styles.subMainTopic}>{item.subtitle}</Text>
+                    <TouchableOpacity style={styles.shopBtn}>
+                      <Text style={styles.shopBtnText}>Shop now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image source={item.image} style={styles.slideImage} />
+                </View>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              nestedScrollEnabled={true}
+            />
+
+            {/* Categories Section */}
+            <View style={{ marginVertical: 10 }}>
+              <Text style={styles.CategoryText}>Categories</Text>
+              <FlatList
+                data={categories}
+                renderItem={({ item }) => (
+                  <View style={styles.categoryItem}>
+                    <Image
+                      source={{ uri: item.image }}
+                      style={styles.categoryImage}
+                    />
+                    <Text style={styles.categoryName}>{item.name}</Text>
+                  </View>
+                )}
+                keyExtractor={(item) => item.id}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                nestedScrollEnabled={true}
+              />
+            </View>
+          </>
+        }
+        data={products}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => goToDescription(item)}
+          >
+            <Image source={item.image} style={styles.cardImage} />
+            <Text style={styles.cardTitle}>{item.name}</Text>
+            <Text style={styles.cardPrice}>{item.price}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.cardRow}
+        contentContainerStyle={styles.productList}
+        nestedScrollEnabled={true}
+      />
     </SafeAreaView>
   );
 };
@@ -242,6 +241,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent:"center",
     backgroundColor: "#f0f0f0",
     borderRadius: screenWidth * 0.02,
     padding: screenWidth * 0.03,
@@ -255,20 +255,16 @@ const styles = StyleSheet.create({
   },
 
 
-    slideShowContainer: {
-    height: screenHeight * 0.5,
-    marginTop: screenHeight * 0.02,
-    width: SCREEN_WIDTH,
-  },
-
   slide: {
     width: SCREEN_WIDTH,
-    height: screenHeight * 0.5, // Match the parent ScrollView height
+    height: screenHeight * 0.2, // Match the parent ScrollView height
     backgroundColor: "#ffda2d",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
+    borderRadius:20,
+    marginTop:20,
+    padding:10,
   },
   slideImage: {
     width: "40%",
@@ -302,7 +298,7 @@ const styles = StyleSheet.create({
   categoryItem: {
     alignItems: "center",
     marginRight: screenWidth * 0.05,
-    padding:10,
+    padding: 10,
   },
   categoryImage: {
     width: screenWidth * 0.18,
@@ -376,5 +372,4 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
   },
-
 });
