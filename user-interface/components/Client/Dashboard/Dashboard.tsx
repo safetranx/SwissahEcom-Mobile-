@@ -12,6 +12,7 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
+import { router } from "expo-router";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -73,6 +74,18 @@ const Dashboard = () => {
     }
   }, [currentSlide]);
 
+const goToDescription = (product:any) => {
+  router.push({
+    pathname: "/description",
+    params: {
+      productName: product.name,
+      productPrice: product.price,
+      productImage: product.image.uri,
+    },
+  });
+};
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -129,6 +142,7 @@ const Dashboard = () => {
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
+            nestedScrollEnabled={true}
           />
         </View>
 
@@ -147,22 +161,27 @@ const Dashboard = () => {
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled={true}
         />
 
         {/* Products */}
         <FlatList
           data={products}
           renderItem={({ item }) => (
-            <View style={styles.card}>
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => goToDescription(item)}
+            >
               <Image source={item.image} style={styles.cardImage} />
               <Text style={styles.cardTitle}>{item.name}</Text>
               <Text style={styles.cardPrice}>{item.price}</Text>
-            </View>
+            </TouchableOpacity>
           )}
           keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={styles.cardRow}
           contentContainerStyle={styles.productList}
+          nestedScrollEnabled={true}
         />
       </ScrollView>
     </SafeAreaView>

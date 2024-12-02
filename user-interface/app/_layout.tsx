@@ -49,15 +49,13 @@ function RootLayoutNav() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="onboard"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="onboard" options={{ headerShown: false }} />
       <Stack.Screen name="userlogin" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="forgot" options={{ headerShown: false }} />
       <Stack.Screen name="OtpAuth" options={{ headerShown: false }} />
       <Stack.Screen name="createNewPassword" options={{ headerShown: false }} />
+      <Stack.Screen name="description" options={{ headerShown: false }} />
     </Stack>
   );
 }
