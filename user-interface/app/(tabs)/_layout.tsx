@@ -1,16 +1,29 @@
 import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons"; // Import Ionicons for futuristic icons
+import { Ionicons } from "@expo/vector-icons";
+import { useCart } from "@/Context/CartContext"; // Adjust path if needed
 
-// Component for rendering TabBar icons
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
+  badgeCount?: number;
 }) {
-  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />;
+  return (
+    <View style={{ position: "relative" }}>
+      <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />
+      {props.badgeCount ? (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{props.badgeCount}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
 }
 
 export default function TabLayout() {
+  const { cartCount } = useCart(); // Access cart count
+
   return (
     <Tabs
       screenOptions={{
@@ -45,7 +58,11 @@ export default function TabLayout() {
         options={{
           tabBarLabel: "Cart",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="cart-outline" color={color} />
+            <TabBarIcon
+              name="cart-outline"
+              color={color}
+              badgeCount={cartCount}
+            />
           ),
         }}
       />
@@ -62,3 +79,23 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  badge: {
+    position: "absolute",
+    top: -5,
+    right: -10,
+    backgroundColor: "red",
+    borderRadius: 10,
+    padding: 2,
+    minWidth: 18,
+    minHeight: 18,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+});

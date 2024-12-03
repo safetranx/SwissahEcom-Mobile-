@@ -11,6 +11,8 @@ import {
 import { useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useCart } from "@/Context/CartContext";
+import Toast from "@/components/Alert/Toast";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -19,9 +21,12 @@ const ProductDescription = () => {
   const navigation = useNavigation();
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0);
+  const { addToCart } = useCart();
 
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
+   const [toastVisible, setToastVisible] = useState(false);
+   const [toastMessage, setToastMessage] = useState("");
 
   const sizes = ["S", "M", "L", "XL"];
   const colors = ["#787676", "#433f40", "#121111"];
@@ -31,6 +36,20 @@ const ProductDescription = () => {
   const increaseQuantity = () => setQuantity((prev) => prev + 1);
   const decreaseQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
+
+
+  const handleAddToCart = () => {
+    addToCart({
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      quantity,
+    });
+    setToastMessage("Item added to cart!");
+    setToastVisible(true);
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -157,9 +176,15 @@ const ProductDescription = () => {
         </View>
       </View>
       <View style={{ paddingHorizontal: 16, marginTop: 20 }}>
-        <TouchableOpacity style={styles.authButton}>
+        <TouchableOpacity style={styles.authButton} onPress={handleAddToCart}>
           <Text style={styles.authButtonText}>Add to cart</Text>
         </TouchableOpacity>
+        
+        <Toast
+          visible={toastVisible}
+          message={toastMessage}
+          onDismiss={() => setToastVisible(false)}
+        />
       </View>
     </SafeAreaView>
   );
