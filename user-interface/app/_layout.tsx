@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import {CartProvider} from '@/Context/CartContext';
 
 
 export {
@@ -47,6 +48,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
+   <CartProvider>
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="onboard" options={{ headerShown: false }} />
@@ -57,5 +59,6 @@ function RootLayoutNav() {
       <Stack.Screen name="createNewPassword" options={{ headerShown: false }} />
       <Stack.Screen name="description" options={{ headerShown: false }} />
     </Stack>
+   </CartProvider>
   );
 }

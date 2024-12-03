@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
 
   // Profile Section
   profileDisplay: {
-    paddingTop: screenHeight * 0.03,
+    paddingTop: screenHeight * 0.00,
     paddingHorizontal: screenWidth * 0.05,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -337,19 +337,27 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: "#f8f8f8",
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    borderRadius: 12,
     marginBottom: screenHeight * 0.02,
     marginHorizontal: screenWidth * 0.01,
     alignItems: "center",
+
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+
+    // Shadow for Android
+    elevation: 4,
   },
   cardImage: {
     width: "100%",
     height: screenHeight * 0.2,
     resizeMode: "contain",
     marginBottom: screenHeight * 0.01,
-    borderTopRightRadius: 40,
-    borderTopLeftRadius: 40,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   cardTitle: {
     fontSize: screenWidth * 0.04,
@@ -377,6 +385,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   cardDetails: {
-    padding:20,
+    padding: 20,
   },
 });

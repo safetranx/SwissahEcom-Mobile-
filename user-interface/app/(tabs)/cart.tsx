@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import ShoppingCart from '@/components/Client/ShoppingCart/ShoppingCart'
 
 const cart = () => {
   return (
-    <View>
-      <Text>cart</Text>
+    <View style={{flex: 1,
+      paddingTop:Platform.OS === 'android' ? 40 : 0,
+    }}>
+      <ShoppingCart/>
     </View>
   )
 }
