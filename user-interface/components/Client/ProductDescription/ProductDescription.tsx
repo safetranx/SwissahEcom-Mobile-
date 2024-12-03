@@ -18,7 +18,13 @@ const ProductDescription = () => {
   const { productName, productPrice, productImage } = useLocalSearchParams();
   const navigation = useNavigation();
   const [quantity, setQuantity] = useState(1);
-  const [rating, setRating] = useState(0); // State to manage user rating
+  const [rating, setRating] = useState(0);
+
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+
+  const sizes = ["S", "M", "L", "XL"];
+  const colors = ["#787676", "#433f40", "#121111"];
 
   const imageUri = typeof productImage === "string" ? productImage : null;
 
@@ -38,7 +44,7 @@ const ProductDescription = () => {
               <Ionicons name="chevron-back" size={24} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="share-social" size={24} color="black" />
+              <Ionicons name="heart" size={24} color="black" />
             </TouchableOpacity>
           </View>
 
@@ -106,50 +112,51 @@ const ProductDescription = () => {
       </View>
 
       <View style={styles.sizeContainer}>
+        {/* Size Buttons */}
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Choose size</Text>
-          <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>S</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>M</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>L</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>XL</Text>
-            </TouchableOpacity>
+          <Text style={styles.sectionTitle}>Choose Size</Text>
+          <View style={styles.buttonRow}>
+            {sizes.map((size: any) => (
+              <TouchableOpacity
+                key={size}
+                style={[
+                  styles.sizeButton,
+                  selectedSize === size && styles.selectedSizeButton,
+                ]}
+                onPress={() => setSelectedSize(size)}
+              >
+                <Text
+                  style={[
+                    styles.sizeButtonText,
+                    selectedSize === size && styles.selectedSizeButtonText,
+                  ]}
+                >
+                  {size}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
+        {/* Color Buttons */}
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Color</Text>
-          <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>S</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>M</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>L</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.quantityButton}>
-              <Text>XL</Text>
-            </TouchableOpacity>
+          <Text style={styles.sectionTitle}>Choose Color</Text>
+          <View style={styles.buttonRow}>
+            {colors.map((color: any) => (
+              <TouchableOpacity
+                key={color}
+                style={[
+                  styles.colorButton,
+                  { backgroundColor: color },
+                  selectedColor === color && styles.selectedColorButton,
+                ]}
+                onPress={() => setSelectedColor(color)}
+              />
+            ))}
           </View>
         </View>
       </View>
-
-      <View style={{paddingHorizontal:16, marginTop: 20}}>
+      <View style={{ paddingHorizontal: 16, marginTop: 20 }}>
         <TouchableOpacity style={styles.authButton}>
           <Text style={styles.authButtonText}>Add to cart</Text>
         </TouchableOpacity>
@@ -259,11 +266,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 13,
   },
+
+  sectionTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 10,
+  },
+  sizeButton: {
+    // padding:10,
+    height: 35,
+    width: 35,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+    borderRadius: 20,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedSizeButton: {
+    backgroundColor: "black",
+  },
+  sizeButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+  },
+  selectedSizeButtonText: {
+    color: "white",
+  },
+  colorButton: {
+    height: 35,
+    width: 35,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+  },
+  selectedColorButton: {
+    borderColor: "black",
+    borderWidth: 3,
+  },
   sizeContainer: {
-    paddingHorizontal: 16,
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
   },
 
   authButton: {

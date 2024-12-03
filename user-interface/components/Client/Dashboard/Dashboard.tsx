@@ -173,8 +173,11 @@ const Dashboard = () => {
             onPress={() => goToDescription(item)}
           >
             <Image source={item.image} style={styles.cardImage} />
+
+            <View style={styles.cardDetails}>
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardPrice}>{item.price}</Text>
+            </View>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     backgroundColor: "#f0f0f0",
     borderRadius: screenWidth * 0.02,
     padding: screenWidth * 0.03,
@@ -254,7 +257,6 @@ const styles = StyleSheet.create({
     gap: screenWidth * 0.02,
   },
 
-
   slide: {
     width: SCREEN_WIDTH,
     height: screenHeight * 0.2, // Match the parent ScrollView height
@@ -262,9 +264,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius:20,
-    marginTop:20,
-    padding:10,
+    borderRadius: 20,
+    marginTop: 20,
+    padding: 10,
   },
   slideImage: {
     width: "40%",
@@ -333,19 +335,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   card: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: screenWidth * 0.03,
-    padding: screenWidth * 0.03,
-    marginBottom: screenHeight * 0.02,
     flex: 1,
+    backgroundColor: "#f8f8f8",
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    marginBottom: screenHeight * 0.02,
     marginHorizontal: screenWidth * 0.01,
     alignItems: "center",
   },
   cardImage: {
-    width: screenWidth * 0.35,
-    height: screenWidth * 0.35,
+    width: "100%",
+    height: screenHeight * 0.2,
     resizeMode: "contain",
     marginBottom: screenHeight * 0.01,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
   },
   cardTitle: {
     fontSize: screenWidth * 0.04,
@@ -371,5 +375,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     textAlign: "center",
+  },
+  cardDetails: {
+    padding:20,
   },
 });
