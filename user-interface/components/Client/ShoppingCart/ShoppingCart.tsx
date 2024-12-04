@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,8 +8,12 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useCart } from "@/Context/CartContext";
+import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo for icons
+import Toast from "@/components/Alert/Toast";
+
 
 interface CartItem {
   name: string;
@@ -21,31 +25,68 @@ interface CartItem {
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const ShoppingCart = () => {
-  const { cartItems } = useCart();
+  const { cartItems, removeItemFromCart }:any = useCart();
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  const showToast = (message: string, type: "success" | "error") => {
+    setToastMessage(message);
+    setToastType(type);
+    setToastVisible(true);
+  };
+
+  const handleDelete = (itemName: string) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this item from your cart?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            removeItemFromCart(itemName);
+            showToast("Item has been deleted!", "error");
+          },
+        },
+      ]
+    );
+  };
 
   const renderCartItem = ({ item }: { item: CartItem }) => (
     <View style={styles.cartItem}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.name)}
+        >
+          <Ionicons name="trash-outline" size={20} color="red" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.info}>
         <View style={styles.header}>
           <Text style={styles.name}>{item.name}</Text>
-          <TouchableOpacity>
-            <Text style={styles.menuText}>...</Text>
-          </TouchableOpacity>
         </View>
         <Text style={styles.rating}>⭐ 4.5</Text>
-
-        <View style={{flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
-        <Text style={styles.price}>{item.price}</Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantity}>{item.quantity}</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>+</Text>
-          </TouchableOpacity>
-        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.price}>{item.price}</Text>
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.quantity}>{item.quantity}</Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -63,6 +104,12 @@ const ShoppingCart = () => {
       ) : (
         <Text style={styles.emptyMessage}>Your cart is empty!</Text>
       )}
+      <Toast
+        visible={toastVisible}
+        message={toastMessage}
+        type={toastType}
+        onDismiss={() => setToastVisible(false)}
+      />
     </SafeAreaView>
   );
 };
@@ -77,25 +124,38 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 16,
     color: "#000",
-    paddingHorizontal:16,
-    paddingVertical:17, 
-   
+    paddingHorizontal: 16,
+    paddingVertical: 17,
   },
   cartItem: {
     flexDirection: "row",
-    backgroundColor: "#fff", // White background for the items
-    justifyContent:"space-between",
+    backgroundColor: "#fff",
+    justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom:26,
+    paddingBottom: 26,
     padding: 12,
     marginBottom: 12,
-    borderBottomWidth:2,
-    borderColor:"#f6f6f6",
+    borderBottomWidth: 2,
+    borderColor: "#f6f6f6",
+  },
+  imageContainer: {
+    position: "relative",
   },
   image: {
     width: 100,
     height: 100,
     borderRadius: 10,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    backgroundColor: "white",
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
   },
   info: {
     flex: 1,
@@ -111,15 +171,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
-  menuText: {
-    fontSize: 25,
-    color: "#000",
-    fontWeight:"bold"
-  },
   rating: {
     fontSize: 14,
-    color: "#FFD700", 
-    marginTop:4,
+    color: "#FFD700",
+    marginTop: 4,
   },
   price: {
     fontSize: 22,
@@ -136,7 +191,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    borderWidth:2,
+    borderWidth: 2,
     borderColor: "#E0E0E0",
     justifyContent: "center",
     alignItems: "center",

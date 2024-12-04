@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext } from "react";
 
-// Define the context with the necessary values (cartItems and cartCount)
+// Define the context with the necessary values
 const CartContext = createContext({
   cartItems: [],
   cartCount: 0,
   addToCart: (item) => {},
+  removeItemFromCart: (itemName) => {},
 });
 
 export const CartProvider = ({ children }) => {
@@ -25,11 +26,24 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const removeItemFromCart = (itemName) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.name !== itemName)
+    );
+  };
+
   // Calculate total count of items in the cart
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cartItems, cartCount, addToCart }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        cartCount,
+        addToCart,
+        removeItemFromCart, 
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
