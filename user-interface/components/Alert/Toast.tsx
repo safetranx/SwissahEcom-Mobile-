@@ -4,23 +4,25 @@ import { StyleSheet, Text, View, Animated } from "react-native";
 const Toast = ({
   visible,
   message,
+  type = "success",
   onDismiss,
 }: {
   visible: boolean;
   message: string;
+  type?: "success" | "error";
   onDismiss: () => void;
 }) => {
-  const [fadeAnim] = useState(new Animated.Value(0)); // Fade animation value
+  const [fadeAnim] = useState(new Animated.Value(0)); 
 
   useEffect(() => {
     if (visible) {
-      // Fade in the toast
+     
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
       }).start(() => {
-        // Automatically dismiss after 2 seconds
+        
         setTimeout(() => {
           Animated.timing(fadeAnim, {
             toValue: 0,
@@ -35,7 +37,15 @@ const Toast = ({
   if (!visible) return null;
 
   return (
-    <Animated.View style={[styles.toast, { opacity: fadeAnim }]}>
+    <Animated.View
+      style={[
+        styles.toast,
+        {
+          backgroundColor: type === "error" ? "red" : "black",
+          opacity: fadeAnim,
+        },
+      ]}
+    >
       <Text style={styles.text}>{message}</Text>
     </Animated.View>
   );
@@ -49,7 +59,6 @@ const styles = StyleSheet.create({
     bottom: 50,
     left: "10%",
     right: "10%",
-    backgroundColor: "black",
     padding: 16,
     borderRadius: 8,
     elevation: 3,

@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useLocalSearchParams } from "expo-router";
+import { Href, router, useLocalSearchParams } from "expo-router";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform, PixelRatio, Dimensions } from "react-native";
 
@@ -47,17 +47,17 @@ const Onboard = () => {
 
   // Move to the next slide
 const nextSlide = () => {
-  
   if (currentSlide < slides.length - 1) {
     setCurrentSlide(currentSlide + 1);
   } else {
-  setTimeout(() => {
-    router.replace("/userlogin");
-  }, 0);
-
-
+    if (role === "seller") {
+      router.push("/sellerlogin" as Href); 
+    } else {
+      router.replace("/userlogin"); 
+    }
   }
 };
+
 
 
 
