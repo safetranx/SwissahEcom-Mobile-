@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import { useCart } from "@/Context/CartContext";
-import { Ionicons } from "@expo/vector-icons"; // Assuming you're using Expo for icons
+import { Ionicons } from "@expo/vector-icons";
 import Toast from "@/components/Alert/Toast";
 
 
