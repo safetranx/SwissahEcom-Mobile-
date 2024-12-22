@@ -28,8 +28,8 @@ const VendorAuth = () => {
         </Text>
         <Text>
           {isLogin
-            ? "Let’s login and continue shopping"
-            : "Create your account and Start Shopping"}
+            ? "Let’s login and continue selling"
+            : "Create your account and Start Selling"}
         </Text>
       </View>
 

@@ -1,12 +1,12 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Onboard from '@/components/Onboard'
 
 const onboard = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
      <Onboard/>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -15,6 +15,5 @@ export default onboard
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        
     }
 })
