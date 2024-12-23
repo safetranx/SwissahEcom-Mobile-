@@ -52,9 +52,16 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onboard" options={{ headerShown: false }} />
+        <Stack.Screen name="selleronboard" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="validatoronboard"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="rideronboard" options={{ headerShown: false }} />
         <Stack.Screen name="userlogin" options={{ headerShown: false }} />
         <Stack.Screen name="sellerlogin" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(vendors)" options={{ headerShown: false }} />
         <Stack.Screen name="forgot" options={{ headerShown: false }} />
         <Stack.Screen name="OtpAuth" options={{ headerShown: false }} />
         <Stack.Screen

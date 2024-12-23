@@ -26,7 +26,7 @@ const VenderLogin = () => {
   const handleSignIn = () => {
     setIsModalVisible(true);
     setTimeout(() => {
-      router.push("/(tabs)/dashboard");
+      router.push("/(vendors)/dashboard");
       setIsModalVisible(false);
     }, 3000);
   };

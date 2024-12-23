@@ -18,13 +18,34 @@ const Landing = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [showPicker, setShowPicker] = useState(false); // For iOS modal
 
-  const handleNext = () => {
-    if (selectedRole) {
-      router.push({ pathname: "/onboard", params: { role: selectedRole } });
-    } else {
-      alert("Please select a role.");
-    }
-  };
+ const handleNext = () => {
+   switch (selectedRole.toLowerCase()) {
+     case "buyer":
+       router.push({ pathname: "/onboard", params: { role: selectedRole } });
+       break;
+     case "seller":
+       router.push({
+         pathname: "/selleronboard",
+         params: { role: selectedRole },
+       });
+       break;
+     case "validator":
+       router.push({
+         pathname: "/validatoronboard",
+         params: { role: selectedRole },
+       });
+       break;
+     case "rider":
+       router.push({
+         pathname: "/rideronboard",
+         params: { role: selectedRole },
+       });
+       break;
+     default:
+       alert("Please select a role.");
+   }
+ };
+
 
   return (
     <View style={styles.container}>
@@ -60,8 +81,10 @@ const Landing = () => {
                   onValueChange={(itemValue) => setSelectedRole(itemValue)}
                 >
                   <Picker.Item label="Choose your role" value="" />
-                  <Picker.Item label="Buyer" value="Buyer" />
-                  <Picker.Item label="Seller" value="Seller" />
+                  <Picker.Item label="Buyer" value="buyer" />
+                  <Picker.Item label="Seller" value="seller" />
+                  <Picker.Item label="Validator" value="validator" />
+                  <Picker.Item label="Rider" value="rider" />
                 </Picker>
 
                 <TouchableOpacity
@@ -92,6 +115,8 @@ const Landing = () => {
             <Picker.Item label="Choose your Role" value="" enabled={false} />
             <Picker.Item label="Buyer" value="buyer" />
             <Picker.Item label="Seller" value="seller" />
+            <Picker.Item label="Validator" value="validator" />
+            <Picker.Item label="Rider" value="rider" />
           </Picker>
         </View>
       )}
@@ -165,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
-    padding:12,
+    padding: 12,
   },
   text: {
     fontSize: 18,
