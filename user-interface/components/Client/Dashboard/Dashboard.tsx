@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
 
   // Profile Section
   profileDisplay: {
-    paddingTop: screenHeight * 0.00,
+    paddingTop: screenHeight * 0.0,
     paddingHorizontal: screenWidth * 0.05,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -231,8 +231,8 @@ const styles = StyleSheet.create({
     color: "#111",
   },
   avatar: {
-    width: screenWidth * 0.12,
-    height: screenWidth * 0.12,
+    width: screenWidth * 0.09,
+    height: screenWidth * 0.09,
     borderRadius: screenWidth * 0.06,
   },
 
