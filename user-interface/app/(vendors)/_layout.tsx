@@ -43,7 +43,15 @@ export default function TabLayout() {
         }}
       />
 
-      
+      <Tabs.Screen
+        name="Request"
+        options={{
+          tabBarLabel: "Requests",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="mail-outline" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
